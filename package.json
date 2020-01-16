@@ -40,6 +40,7 @@
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-eslint": "^7.0.0",
     "rollup-plugin-includepaths": "^0.2.3",
+    "rollup-plugin-typescript2": "^0.25.3",
     "ts-jest": "^24.2.0",
     "typedoc": "^0.15.2",
     "typedoc-plugin-nojekyll": "^1.0.1",
@@ -51,7 +52,6 @@
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.9.4",
     "raf": "^3.4.1",
-    "rollup-plugin-typescript2": "^0.25.3",
     "typesafe-actions": "^5.1.0"
   },
   "peerDependencies": {
@@ -61,8 +61,6 @@
   "scripts": {
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "test": "jest",
-    "build": "NODE_ENV=production BABEL_ENV=production rollup -c -m",
-    "build-definitions": "npx tsc --build tsconfig.declarations.json",
-    "build-all": "NODE_ENV=production BABEL_ENV=production yarn build-definitions && yarn build"
+    "build": "NODE_ENV=production BABEL_ENV=production rollup -c -m"
   }
 }
