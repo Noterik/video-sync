@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useReducer, useMemo } from "react";
+import React, { useRef, useEffect, useReducer, useMemo, useCallback } from "react";
 import { reducer, initialState } from "./SyncedVideo.reducer";
 import * as actions from "./SyncedVideo.actions";
 import { mergeRefs } from "../util";
@@ -9,6 +9,7 @@ interface SyncedVideoProps extends React.VideoHTMLAttributes<HTMLVideoElement> {
   onOutOfSync?: () => void;
   onSync?: () => void;
   onCancelSync?: () => void;
+  maxDrift?: number;
 };
 
 type Seek = {
@@ -51,15 +52,15 @@ const checkSync = (maxDiff: number) => (syncTime: number, video: HTMLVideoElemen
   return Math.abs(syncTime - video.currentTime * 1000) > maxDiff;
 }
 
-const isSynced = checkSync(500);
-
 export const SyncedVideo = React.forwardRef<HTMLVideoElement, SyncedVideoProps>((props, ref) => {
-  const { time, playing = false, onOutOfSync, onSync, onCancelSync, ...rest } = props; 
+  const { time, playing = false, onOutOfSync, onSync, onCancelSync, maxDrift = 500, ...rest } = props; 
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const currentSeek = useRef<Seek>();
+
+  const isSynced = useMemo(() => checkSync(maxDrift), [maxDrift]);
 
   useEffect(() => {
     if(videoRef.current) {
